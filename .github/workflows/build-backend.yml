@@ -1,0 +1,76 @@
+name: Build GeoProject Backend
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'backend/**'
+
+  # manual trigger
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Backend Docker Image
+    runs-on: self-hosted
+
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+    steps:
+      - name: Checkout Git Repo
+        uses: actions/checkout@v4
+
+      - name: Truncate hash
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Build Backend Docker Image
+        working-directory: ./backend
+        run: docker build --no-cache -t harbor.zopaai.com/geo/geo-backend:${{ steps.vars.outputs.sha_short }} .
+
+      - name: Push Backend Docker Image
+        run: docker push harbor.zopaai.com/geo/geo-backend:${{ steps.vars.outputs.sha_short }}
+
+      - name: Prune Docker System
+        if: always()
+        run: docker system prune -af
+
+  deploy:
+    name: Deploy Backend to ArgoCD
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+      - name: Checkout Deployment Infra
+        run: git clone git@github.com:SupplyIQ/deployment-infra.git -b main
+
+      - name: Update Backend Image Tag
+        shell: bash
+        run: |
+          yml_file="./deployment-infra/apps/GeoProject/backend-deployment.yml"
+          old_tag=$(grep -o 'geo-backend:[^ "]*' "$yml_file")
+          sed -i "s/$old_tag/geo-backend:${{ needs.build.outputs.sha_short }}/" "$yml_file"
+          cat "$yml_file"
+
+      - name: Commit and Push Changes
+        working-directory: ./deployment-infra
+        shell: bash
+        run: |
+          git config user.email "github-actions[bot]@zopaai.com"
+          git config user.name "github-actions[bot]"
+          git add ./apps/GeoProject/backend-deployment.yml
+          if git diff --cached --quiet; then
+            echo "No deployment changes detected."
+            exit 0
+          fi
+          git commit -m "updated backend image tag to ${{ needs.build.outputs.sha_short }}"
+          git push
+
+      - name: Clean Deployment Infra Repo
+        if: always()
+        run: rm -rf ./deployment-infra
+
+
+
