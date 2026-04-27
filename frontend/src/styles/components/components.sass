@@ -1,0 +1,29 @@
+@use '../utils/_variables' as *
+@use '../utils/_mixins' as *
+@use '../utils/_media' as *
+
+.section
+    border-radius: 20px
+    border: thin solid $dark-3
+    background-color: $grey-2
+    padding: 20px
+    margin-top: 20px
+
+    &--2
+        padding: 0
+
+    &--3
+        margin-top: 0
+        margin-bottom: 50px
+
+.section-title
+    display: flex
+    align-items: center
+    gap: 1ch
+    margin-bottom: 20px
+
+    &--2
+        margin-bottom: 10px
+
+    :is(h1, h2, h3)
+        font-size: $size-20

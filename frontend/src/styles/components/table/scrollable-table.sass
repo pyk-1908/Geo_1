@@ -1,0 +1,105 @@
+@use "@styles/utils/variables" as *
+@use "@styles/base/classes" as *
+
+.table__container--scrollable
+    width: 100%
+    border: thin solid $dark-3
+    border-radius: 20px
+    margin-bottom: 0
+    background: $white
+    overflow: hidden
+    position: relative
+    z-index: 0
+
+    .table__overflow--competitor
+        overflow-x: auto
+        overflow-y: auto
+        max-height: 545px
+
+        table
+            table-layout: auto
+            width: 100%
+            border-collapse: separate
+            border-spacing: 0
+            margin-bottom: 0
+
+            th:first-child,
+            td:first-child
+                position: sticky
+                left: 0
+                z-index: 2
+                border-right: none
+                transform: translateZ(0)
+                will-change: transform
+
+            th:first-child
+                z-index: 7
+
+            th, td
+                padding: 15px 20px
+                text-align: center
+                white-space: nowrap
+
+                &:first-of-type
+                    text-align: left
+                    border-right: thin dashed $dark-3
+
+        thead
+            th
+                background: $white
+                position: sticky
+                top: 0
+                z-index: 6
+                border-bottom: thin solid $dark-3
+
+                span
+                    color: $dark
+                    font-weight: 400
+                    font-size: $size-14
+
+                &:first-child
+                    border-right: none
+
+                &:not(:first-child) > div
+                    @extend .flex-center
+                    gap: 10px
+
+        tbody
+            tr:last-of-type
+                td
+                    border-bottom: none
+
+            td
+                background-color: $white
+
+                > span
+                    font-size: $size-16
+
+                .active
+                    color: $dark-green
+                    font-weight: bold
+                    text-decoration: underline
+                    cursor: pointer
+
+.header-row
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 5px
+
+@supports selector(::-webkit-scrollbar)
+    .table__overflow--competitor
+        &::-webkit-scrollbar
+            width: 3px
+            height: 4px
+
+        &::-webkit-scrollbar-track
+            background: $scrollbar
+
+        &::-webkit-scrollbar-thumb
+            background-color: $primary
+
+@supports not selector(::-webkit-scrollbar)
+    .table__overflow--competitor
+        scrollbar-width: 4px
+        scrollbar-color: $primary transparent

@@ -1,0 +1,94 @@
+@use '@styles/utils/_variables' as *
+@use '@styles/utils/_mixins' as *
+@use '@styles/utils/_animations' as *
+@use 'sass:color'
+
+.sticky-filters
+    background: $white
+    position: sticky !important
+    z-index: 1000
+    bottom: 0
+    width: 100%
+    padding-block: 20px
+    padding-inline: 5vw
+    border-block: thin solid $dark-3
+    max-width: 100vw
+
+.sticky-filters--minimized
+    border-block-color: transparent
+    background: transparent
+    display: flex
+    justify-content: flex-end
+    padding-right: 20px
+
+.sticky-filters__inner
+    max-width: 1400px
+    margin-inline: auto
+    display: flex
+    align-items: center
+    gap: 16px
+    opacity: 0
+    translate: 0 10px
+    animation: fadeIn 250ms ease-in-out forwards
+
+.button--minimize
+    position: absolute
+    top: 0
+    right: 5vw
+    translate: 0 -50%
+    border-radius: 20px
+    border: thin solid $dark-3
+    font-size: 10px
+    @include flexCenter
+    gap: 4px
+    background-color: $white
+    padding: 4px 10px
+    white-space: nowrap
+    cursor: pointer
+    z-index: 1
+
+    &::before
+        content: ""
+        display: block
+        width: 10px
+        height: 10px
+        background-image: url('data:image/svg+xml,<svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="4.5" cy="4.5" r="4.5" fill="%2300C898"/><rect x="2" y="4" width="5" height="1" rx="0.5" fill="white"/></svg>')
+        background-repeat: no-repeat
+        background-size: contain
+
+    &:hover
+        box-shadow: 4px 4px 8px $primary-1
+
+.button--expand
+    @include flexCenter
+    gap: 5px
+    border-radius: 14px
+    background: $primary
+    color: white
+    padding: 10px
+    border: 6px solid $primary-1
+    font-weight: 500
+    opacity: 0
+    translate: -10px
+    animation: fadeIn 250ms ease-in-out forwards
+    cursor: pointer
+
+    &::before
+        content: ""
+        display: block
+        width: 24px
+        height: 24px
+        background-image: url('data:image/svg+xml,<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" width="24" height="24" rx="5" fill="white"/><path d="M20.6 9.11765H4.4C4.16131 9.11765 3.93239 9.00609 3.7636 8.80753C3.59482 8.60896 3.5 8.33964 3.5 8.05882C3.5 7.77801 3.59482 7.50869 3.7636 7.31012C3.93239 7.11155 4.16131 7 4.4 7H20.6C20.8387 7 21.0676 7.11155 21.2364 7.31012C21.4052 7.50869 21.5 7.77801 21.5 8.05882C21.5 8.33964 21.4052 8.60896 21.2364 8.80753C21.0676 9.00609 20.8387 9.11765 20.6 9.11765ZM17.6 14.0588H7.4C7.16131 14.0588 6.93239 13.9473 6.7636 13.7487C6.59482 13.5501 6.5 13.2808 6.5 13C6.5 12.7192 6.59482 12.4499 6.7636 12.2513C6.93239 12.0527 7.16131 11.9412 7.4 11.9412H17.6C17.8387 11.9412 18.0676 12.0527 18.2364 12.2513C18.4052 12.4499 18.5 12.7192 18.5 13C18.5 13.2808 18.4052 13.5501 18.2364 13.7487C18.0676 13.9473 17.8387 14.0588 17.6 14.0588ZM14 19H11C10.7613 19 10.5324 18.8884 10.3636 18.6899C10.1948 18.4913 10.1 18.222 10.1 17.9412C10.1 17.6604 10.1948 17.391 10.3636 17.1925C10.5324 16.9939 10.7613 16.8824 11 16.8824H14C14.2387 16.8824 14.4676 16.9939 14.6364 17.1925C14.8052 17.391 14.9 17.6604 14.9 17.9412C14.9 18.222 14.8052 18.4913 14.6364 18.6899C14.4676 18.8884 14.2387 19 14 19Z" fill="%2300C898"/></svg>')
+        background-repeat: no-repeat
+        background-size: contain
+
+    &:hover
+        background: color.adjust($primary, $lightness: -5%)
+
+.sticky-filters__content
+    display: flex
+    flex-direction: row
+    align-items: center
+    flex-wrap: wrap
+    gap: 15px
+    flex: 1

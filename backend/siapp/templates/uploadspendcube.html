@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { font-family: Arial, sans-serif; }
+        html, body { height: 100%; margin: 0; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f9f9f9;
+        }
+        .uploaddb-container {
+            background: rgba(255, 255, 255, 0.27);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(6.9px);
+            -webkit-backdrop-filter: blur(6.9px);
+            display: inline-grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            min-height: 30vh;
+            width: min(100%, 400px);
+        }
+        .uploaddb-container > h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin: .5rem 0;
+            color: #00b88a;
+        }
+        .uploaddb-container > form { display: grid; gap: 1rem; }
+        input[type=text], input[type=password] {
+            padding: 0.8rem;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            font-size: 1rem;
+            box-shadow: 0 1px 16px rgba(0, 0, 0, 0.1) inset;
+        }
+        input[type=text]:focus, input[type=password]:focus {
+            outline: none;
+            border-color: #00C898;
+        }
+        .uploaddb-container > form > input[type=file]::file-selector-button {
+            outline: none;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 16px;
+            font-weight: bold;
+            background-color: #00b88a;
+            color: white;
+            cursor: pointer;
+            transition: 0.1s ease-in-out;
+        }
+        .uploaddb-container > form > input[type=file]::file-selector-button:hover {
+            background-color: #00C898;
+        }
+        .uploaddb-container > form > button[type=submit] {
+            padding: 0.8rem;
+            border-radius: 16px;
+            border: 2px solid #00b88a;
+            font-size: 1rem;
+            font-weight: bold;
+            background-color: transparent;
+            color: #00b88a;
+            cursor: pointer;
+            width: fit-content;
+            justify-self: center;
+            transition: 0.1s ease-in-out;
+        }
+        .uploaddb-container > form > button[type=submit]:hover {
+            background-color: #00b88a;
+            color: white;
+        }
+        #error {
+            justify-self: center;
+            text-align: center;
+            overflow-wrap: break-word;
+            color: red;
+        }
+        #success {
+            justify-self: center;
+            text-align: center;
+            color: #00b88a;
+            font-weight: bold;
+        }
+        .loader-container {
+            visibility: hidden;
+            border-radius: inherit;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backdrop-filter: inherit;
+            z-index: 1;
+        }
+        .loader, .loader div { color: #00b88a; box-sizing: border-box; }
+        .loader {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        .loader div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid currentColor;
+            border-radius: 50%;
+            animation: loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: currentColor transparent transparent transparent;
+        }
+        .loader div:nth-child(1) { animation-delay: -0.45s; }
+        .loader div:nth-child(2) { animation-delay: -0.3s; }
+        .loader div:nth-child(3) { animation-delay: -0.15s; }
+        @keyframes loader {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <title>Upload: Spend Cube</title>
+</head>
+<body>
+<div class="uploaddb-container">
+    <h1>Upload: Spend Cube</h1>
+    <form id="uploadForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <input type="file" id="file" name="file" accept=".xlsx,.xlsb,.xls,.xlsm,.csv" required>
+        <button type="submit">Upload File</button>
+    </form>
+    <div id="error" style="display:none;"></div>
+    <div id="success" style="display:none;">File uploaded successfully!</div>
+    <div class="loader-container">
+        <div class="loader">
+            <div></div><div></div><div></div><div></div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const loader = document.querySelector('.loader-container');
+        const errorDiv = document.getElementById('error');
+        const successDiv = document.getElementById('success');
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
+        loader.style.visibility = 'visible';
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const file = document.getElementById('file').files[0];
+
+        try {
+            const loginResponse = await fetch('/api/token/pair', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
+            if (!loginResponse.ok) throw new Error('Login failed. Check username and password.');
+            const { access } = await loginResponse.json();
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const uploadResponse = await fetch('/api/upload/uploadspendcube/', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${access}` },
+                body: formData,
+            });
+
+            const result = await uploadResponse.json();
+            if (!uploadResponse.ok) throw new Error(result.error || 'Upload failed.');
+
+            successDiv.textContent = `Created: ${result.created ?? 0}, Skipped: ${result.skipped ?? 0}`;
+            successDiv.style.display = 'block';
+        } catch (error) {
+            errorDiv.textContent = error.message;
+            errorDiv.style.display = 'block';
+        } finally {
+            loader.style.visibility = 'hidden';
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+@use "../base/classes" as *
+@use "../utils/variables" as *
+
+.auth-page
+    display: flex
+    align-items: center
+    justify-content: center
+    min-height: 100vh
+    position: relative
+    z-index: 0
+
+    &::before
+        content: ""
+        position: absolute
+        inset: 0
+        background: linear-gradient(to bottom, white, transparent)
+        z-index: -1
+
+    &__inner
+        width: 100%
+        max-width: 480px
+        padding: 20px
+
+h1
+    font-size: $size-28
+    margin-bottom: 40px
+    text-align: center
+
+form
+    padding-inline: 25px
+
+    button
+        width: 100%
+        padding-block: 30px
+
+.remember-password
+    @extend .flex-center
+    width: 100%
+    margin-top: 10px
+    padding: 10px 25px 10px 25px
+    background: $white
+    border: thin solid $dark-3
+    border-radius: 10px
+    color: $dark-1
+    white-space: nowrap
+
+    span
+        cursor: pointer
+        color: $primary
+        font-weight: bold
+        text-decoration: underline

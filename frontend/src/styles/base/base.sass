@@ -1,0 +1,42 @@
+@use '../utils/_variables' as *
+@use '../utils/_media' as *
+@use '../utils/_mixins' as *
+@forward './reset'
+@forward './typography'
+@forward './inputs'
+@forward './classes'
+@forward './buttons'
+
+body > main
+    position: relative
+    z-index: 0
+
+html
+    scroll-behavior: smooth
+    overflow: auto !important
+
+body
+    scroll-behavior: smooth
+
+body
+    &::-webkit-scrollbar
+        width: 2px
+    /* Track */
+    &::-webkit-scrollbar-track
+        box-shadow: inset 0 0 5px grey
+        border-radius: 10px
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb
+        background: $primary
+        border-radius: 10px
+
+#app
+    overflow-x: clip
+    min-height: 100vh
+    min-height: 100lvh
+    display: grid
+    grid-template-rows: auto 1fr auto
+
+[v-cloak]
+    display: none

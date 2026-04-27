@@ -1,0 +1,206 @@
+@use 'sass:color'
+@use '../utils/_variables' as *
+@use '../utils/_mixins' as *
+
+.select
+    position: relative
+    z-index: 0
+
+    &.selected
+        .select__placeholder
+            font-size: $size-12
+            color: $dark-2
+
+    &.selecting
+        .search__dropdown
+            pointer-events: all
+            opacity: 1
+            translate: 0
+            overflow: clip scroll
+            border-color: $primary
+            @include activeShadow
+
+        .arrow--select
+            rotate: -45deg
+
+    &.disabled
+        opacity: 0.7
+
+        .select__selected span
+            background: $dark-2
+
+        .select__summary
+            user-select: none
+            cursor: not-allowed
+            background-color: $dark-4
+            border-color: $dark-3
+
+.select__summary
+    background-color: $white
+    border: thin solid $primary
+    border-radius: 14px
+    padding: 5px 30px 5px 15px
+    width: 300px
+    height: 50px
+    position: relative
+    z-index: 0
+    display: flex
+    flex-direction: column
+    justify-content: center
+    gap: 4px
+    cursor: pointer
+    @include transition(box-shadow, translate)
+
+.select:not(.disabled) .select__summary:hover
+    translate: 0 -2px
+    @include activeShadow
+
+.select__placeholder
+    line-height: 1
+    @include transition(color, font-size)
+
+.arrow--select
+    position: absolute
+    top: 50%
+    right: 12px
+    translate: 0 -50%
+    border-color: $dark
+    @include square(8px)
+
+.search__dropdown
+    position: absolute
+    inset: auto 0 calc(100% + 10px)
+    background-color: $white
+    border-radius: 12px
+    border: thin solid transparent
+    opacity: 0
+    translate: 0 10px
+    pointer-events: none
+    max-height: 200px
+    overflow: hidden
+    @include transition(opacity, border-color, box-shadow, translate)
+
+.search__dropdown__option
+    position: relative
+    z-index: 0
+
+    &:hover
+        background-color: $primary-1
+
+    span
+        display: block
+        padding: 5px 10px
+
+    input
+        position: absolute
+        inset: 0
+        width: 100%
+        height: 100%
+        cursor: pointer
+        z-index: 10
+        opacity: 0
+
+        &:checked ~ span
+            background-color: $primary
+            color: $white
+
+.select__selected
+    display: flex
+    align-items: center
+    gap: 0.5ch
+
+    span
+        display: inline-block
+        padding-inline: 5px
+        background-color: $dark-4
+        border-radius: 4px
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+        position: relative
+        z-index: 0
+        padding-right: 20px
+
+        &:first-child
+            flex: 0 1 auto
+            min-width: 0
+
+        &:nth-child(2)
+            flex: 0 0 auto
+            width: auto
+            max-width: none
+
+        button
+            position: absolute
+            z-index: 1
+            top: 50%
+            right: 5px
+            translate: 0 -50%
+
+.select__search
+    background: white
+    border: none
+    border-bottom: thin solid $primary
+    padding: 10px
+    outline: $primary
+    width: 100%
+
+.select__selected span
+    max-width: 100%
+
+.select.select--hoverless .select__summary:hover
+    translate: 0
+    box-shadow: none
+
+.dropdown__option--actions
+    display: flex
+    justify-content: center
+    align-items: center
+    gap: 10px
+    font-size: $size-12
+    padding-block: 5px
+
+    &:hover
+        background-color: transparent
+
+    .button--clear, .dropdown__option--select-all
+        width: 75px
+        height: 25px
+        text-align: center
+        border-radius: 15px
+        border: thin solid $dark-4
+        font-size: $size-12
+        white-space: nowrap
+
+        span
+            padding: 0
+            width: 100%
+            height: 100%
+            text-align: center
+            display: flex
+            justify-content: center
+            align-items: center
+
+    .button--clear
+        color: $red
+        @include transition(background, border-color, color)
+
+        &:hover
+            background: color.adjust($red, $lightness: -25%)
+            color: $white
+            border-color: $red
+
+    .dropdown__option--select-all
+        color: $gray
+        position: relative
+        @include transition(background, border-color, color)
+
+        &:hover
+            background: color.adjust($primary, $lightness: -5%)
+            color: $white
+            border-color: $primary
+
+        &.selected
+            background: color.adjust($primary, $lightness: -5%)
+            color: $white
+            border-color: $primary

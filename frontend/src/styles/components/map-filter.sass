@@ -1,0 +1,90 @@
+@use '@styles/utils/_variables' as *
+@use '@styles/components/table/table-filter.sass'
+
+h2
+    font-size: $size-25
+
+h3
+    font-size: $size-16
+    font-weight: 400
+    text-decoration: underline
+    margin-bottom: 10px
+
+.map-filter
+    position: absolute
+    top: 15px
+    left: 20px
+    z-index: 20
+
+    &__trigger
+        display: flex
+        align-items: center
+        gap: 10px
+
+    &__arrow
+        width: 8px
+        height: 8px
+
+    &__panel
+        display: flex
+        flex-direction: column
+        min-width: 290px
+        max-height: 355px
+        background: $white
+        border: thin solid $dark-3
+        border-radius: 20px
+        padding: 30px 20px 10px 20px
+
+    &__header
+        display: flex
+        align-items: center
+        gap: 10px
+        margin-bottom: 30px
+
+    &__content
+        display: flex
+        flex-direction: column
+        gap: 10px
+        overflow-y: auto
+
+    &__group
+        border-bottom: thin solid $dark-3
+        padding-bottom: 10px
+
+    &__clear
+        width: fit-content
+        margin: 10px auto 0 auto
+        font-size: $size-14
+        color: $clear
+        font-weight: bold
+        transition: color 0.3s ease-in-out
+        text-decoration: underline
+
+        &:disabled
+            color: $dark-3
+            pointer-events: none
+            cursor: not-allowed
+
+.map-filter-swap-enter-active, .map-filter-swap-leave-active
+    transition: opacity 200ms ease, transform 200ms ease
+
+.map-filter-swap-enter-from, .map-filter-swap-leave-to
+    opacity: 0
+    transform: translateY(3px)
+
+@supports selector(::-webkit-scrollbar)
+    .map-filter__content
+        &::-webkit-scrollbar
+            width: 3px
+            height: 3px
+
+        &::-webkit-scrollbar-track
+            background: $scrollbar
+
+        &::-webkit-scrollbar-thumb
+            background-color: $primary
+
+@supports not selector(::-webkit-scrollbar)
+    .map-filter__content
+        scrollbar-width: thin
+        scrollbar-color: $primary transparent

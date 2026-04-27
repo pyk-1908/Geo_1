@@ -1,0 +1,39 @@
+@mixin mobile-sm
+    @media screen and (max-width: 576px)
+        @content
+
+@mixin mobile
+    @media screen and (max-width: 768px)
+        @content
+
+@mixin tablet
+    @media screen and (max-width: 992px)
+        @content
+
+@mixin desktop
+    @media screen and (min-width: 992px)
+        @content
+
+@mixin media-xs
+    @media screen and (max-width: 576px)
+        @content
+
+@mixin media-md
+    @media screen and (min-width: 768px)
+        @content
+
+@mixin media-lg
+    @media screen and (min-width: 992px)
+        @content
+
+@mixin media-xl
+    @media screen and (min-width: 1200px)
+        @content
+
+@mixin media-xxl-max
+    @media screen and (max-width: 1399px)
+        @content
+
+@mixin media-xxl
+    @media screen and (min-width: 1400px)
+        @content

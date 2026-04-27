@@ -1,0 +1,69 @@
+@use '../utils/variables' as *
+
+.dropdown
+    position: relative
+    z-index: 10
+
+.dropdown--dropped
+    .dropdown__summary
+        border-color: $primary
+
+    .arrow
+        rotate: 45deg
+        translate: -2px 1px
+
+    .dropdown__list
+        opacity: 1
+        pointer-events: all
+
+.dropdown__summary
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 10px
+    border: thin solid $dark-3
+    background: $white
+    border-radius: 10px
+    padding: 10px
+    cursor: pointer
+    transition: border-color 350ms ease-in-out
+
+    .arrow
+        width: 10px
+        height: 10px
+        border-color: $dark
+
+.dropdown__list
+    position: absolute
+    top: calc(100% + 5px)
+    right: 0
+    opacity: 0
+    z-index: 10
+    pointer-events: none
+    background: $white
+    border: thin solid $dark-3
+    border-radius: 12px
+    display: flex
+    flex-direction: column
+    transition: opacity 350ms ease-in-out
+    overflow: hidden
+    cursor: pointer
+    min-width: fit-content
+
+    > *
+        padding: 5px 10px
+        white-space: nowrap
+        display: flex
+        align-items: center
+        gap: 1ch
+        transition: background 250ms ease-in-out
+
+        &:first-child
+            padding-top: 10px
+
+        &:last-child
+            padding-bottom: 10px
+
+        &:hover
+            background: $dark-3

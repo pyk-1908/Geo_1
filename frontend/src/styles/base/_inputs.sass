@@ -1,0 +1,68 @@
+@use "../utils/_variables" as *
+@use "../utils/_mixins" as *
+
+.input__container + .input__container
+    margin-top: 25px
+
+.input__field
+    width: 100%
+    position: relative
+    @include transition(border)
+
+    label
+        pointer-events: none
+        position: absolute
+        top: 50%
+        left: 60px
+        translate: 0 -50%
+        @include transition(translate, color, font-size)
+
+    > svg
+        position: absolute
+        top: 50%
+        left: 30px
+        translate: 0 -50%
+
+    input
+        background: $white
+        border-radius: 15px
+        border: thin solid $dark-3
+        padding: 45px 20px 25px 60px
+        width: 100%
+        outline: none
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active
+            -webkit-box-shadow: inset 0 0 0 1000px white !important
+            box-shadow: inset 0 0 0 1000px white !important
+            background-color: white !important
+
+    &:focus-within label,
+    &.filled label
+        translate: 0 calc(-50% - 10px)
+        color: $gray
+        font-size: $size-12
+        font-weight: bold
+        z-index: 1
+
+.input__wall
+    position: absolute
+    top: 50%
+    right: 20px
+    translate: 0 -50%
+    cursor: pointer
+    border-left: thin solid $dark-3
+    height: calc(100% - 30px)
+    padding-left: 20px
+    display: flex
+    align-items: center
+
+.error__text
+    color: red
+    margin-block: 5px
+
+.is-invalid
+    border-color: red
+    margin-bottom: 0

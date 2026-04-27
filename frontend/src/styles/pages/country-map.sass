@@ -1,0 +1,115 @@
+@use '@styles/utils/_variables' as *
+@use '@styles/utils/_mixins' as *
+@forward '@styles/components/table/scrollable-table.sass'
+
+.v-enter-active,
+.v-leave-active
+    transition: opacity 0.3s ease-in-out
+
+.v-enter-from,
+.v-leave-to
+    opacity: 0
+
+.section
+    margin: 0 0 50px 0
+
+.main-content
+    min-height: 50vh
+
+:deep(.table .info-container svg)
+    width: 15px
+    height: 15px
+
+.map-dropdowns
+    display: flex
+    align-items: center
+    gap: 10px
+    margin-bottom: 10px
+    padding-left: 100px
+
+    :deep(.dropdown__summary)
+        min-width: 180px
+
+    :deep(.dropdown__list)
+        left: 0
+
+.chart-container
+    width: 50%
+    display: flex
+    flex-direction: column
+
+.legend
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 35px
+    margin-top: 10px
+
+    span
+        font-size: $size-12
+        color: $dark
+
+    &__holder
+        display: flex
+        align-items: center
+        gap: 15px
+
+    &__item
+        width: 25px
+        height: 15px
+        border-radius: 10px
+
+        &.green
+            background: $primary-1
+            border: thin solid $primary-2
+
+        &.purple
+            border: thin solid $purple-bar
+            background: $purple-bar-gradient
+
+        &.blue
+            border: thin solid $blue-border
+            background: $blue
+
+.country__details
+    width: 50%
+    border: thin solid #E3E2E0
+    background: #FFFFFF
+    border-radius: 15px
+    padding: 20px 10px 20px 20px
+
+    &--scrollable
+        max-height: 578px
+        overflow-y: auto
+        @include customScrollbar
+        padding-right: 10px
+
+    table th, td
+        background-color: $grey-2 !important
+
+.production-volume
+    margin-top: 20px
+
+    &__header
+        display: flex
+        align-items: center
+        gap: 10px
+        padding-bottom: 10px
+
+    h2
+        font-size: $size-20
+        font-weight: 700
+        color: $dark
+
+    :deep(.cost-development)
+        border: thin solid $dark-3 !important
+        padding: 10px
+
+    :deep(.cost-development__header)
+        padding-top: 10px
+
+    :deep(.cost_chart)
+        min-height: 250px !important
+
+    :deep(.cost_chart__legend)
+        margin-bottom: 10px
