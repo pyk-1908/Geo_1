@@ -55,6 +55,7 @@ if os.getenv("DJANGO_HOSTS") is not None:
     ALLOWED_HOSTS += ["localhost"]
     ALLOWED_HOSTS += ['host.docker.internal']
     CSRF_TRUSTED_ORIGINS = []
+    CSRF_TRUSTED_ORIGINS += os.getenv("DJANGO_HOSTS_CSRF").split(",")
     CSRF_TRUSTED_ORIGINS += ["https://*.supplyiq.eu"]
 else:
     ALLOWED_HOSTS = [
