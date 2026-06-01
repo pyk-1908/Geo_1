@@ -16,6 +16,7 @@ from ninja_jwt.exceptions import AuthenticationFailed, InvalidToken
 from siapp.models import OtpSecrets
 from siapp.views.buyer_view.api import router_buyer
 from siapp.views.lists.api import router_lists
+from siapp.views.salesforce.api import router_salesforce
 from siapp.views.upload.api import router_upload
 
 logger = logging.getLogger('django')
@@ -76,6 +77,7 @@ api = NinjaExtraAPI(throttle=throttle, csrf=False)
 api.register_controllers(AuthController)
 api.add_router("/buyer/", router_buyer)
 api.add_router("/lists/", router_lists)
+api.add_router("/salesforce/", router_salesforce)
 api.add_router("/upload/", router_upload)
 
 
