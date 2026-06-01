@@ -23,8 +23,10 @@ hpack==4.1
 hyperframe==6.1.0
 idna==3.10
 injector==0.22.0
+isodate==0.7.2
 Jinja2==3.1.6
 joblib==1.4.2
+more-itertools==11.1.0
 numpy==2.2.1
 openpyxl==3.1.5
 packaging==24.2
@@ -45,8 +47,11 @@ pyxlsb==1.0.10
 qrcode==8.0
 redis==5.2.1
 requests==2.32.4
+requests-file==3.0.1
+requests-toolbelt==1.0.0
 scikit-learn==1.7.2
 scipy==1.15.1
+simple-salesforce==1.12.6
 six==1.17.0
 soupsieve==2.6
 SQLAlchemy==2.0.37
@@ -59,6 +64,7 @@ tzdata==2024.2
 urllib3==2.6.3
 uvicorn==0.34.0
 whitenoise
+zeep==4.3.2
 polars==1.30.0
 statsmodels==0.14.5
 patsy==1.0.1
