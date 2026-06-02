@@ -271,6 +271,8 @@ class Buyer(models.Model):
     holding_name = models.CharField(max_length=500, null=True, blank=True)
     ticket_own = models.CharField(max_length=50, null=True, blank=True)
     ticket_holding = models.CharField(max_length=50, null=True, blank=True)
+    # Links this buyer to a Salesforce Account so the map can show its notes.
+    salesforce_account_id = models.CharField(max_length=18, null=True, blank=True, db_index=True)
 
 
 class GeoCoordinates(models.Model):

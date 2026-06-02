@@ -47,6 +47,7 @@ def calculate_buyer_buyer_map(customer_id: int, selected_end_date: str, selected
             continue
 
         buyer_plants_dict: dict[tuple, list] = defaultdict(list)
+        buyer_sf_account_map: dict[int, str] = {}
         for element in ItemsToCustomerPeriods.objects.filter(
             customerperiod_id__in=current_periods,
             product_id__in=selected_product_ids,
@@ -54,6 +55,7 @@ def calculate_buyer_buyer_map(customer_id: int, selected_end_date: str, selected
         ).values(
             "buyer_id",
             "buyer__buyer_name",
+            "buyer__salesforce_account_id",
             "address_buyer_id",
             "address_buyer__city",
             "address_buyer__state",
@@ -61,6 +63,7 @@ def calculate_buyer_buyer_map(customer_id: int, selected_end_date: str, selected
             "address_buyer__lng",
         ).distinct():
             buyer_key = (element["buyer_id"], element["buyer__buyer_name"])
+            buyer_sf_account_map[element["buyer_id"]] = element["buyer__salesforce_account_id"]
             buyer_plants_dict[buyer_key].append({
                 "city_name": element["address_buyer__city"],
                 "city_id": element["address_buyer_id"],
@@ -77,6 +80,7 @@ def calculate_buyer_buyer_map(customer_id: int, selected_end_date: str, selected
             result.append({
                 "buyer_name": buyer_name,
                 "buyer_id": buyer_id,
+                "salesforce_account_id": buyer_sf_account_map.get(buyer_id),
                 "growth_score": random.randint(0, 100),
                 "num_plants_abs": num_buyer_plants_dict.get(buyer_id, {}).get(country_id, 0),
                 "locations": locations,
