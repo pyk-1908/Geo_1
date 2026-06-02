@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, watch, computed, toRef } from "vue";
 import { useLeafletChart } from "@composables/charts/leafletChart/useLeafletChart";
 import { normalizeCountryName } from "@composables/charts/leafletChart/leafletUtils";
+import { getAccountNotes } from "@services/salesforce";
 import TableTooltipRight from "@components/icons/TableTooltipRight.vue";
 import ChevronRight from "@components/icons/ChevronRight.vue";
 import MapFilter from "@components/MapFilter.vue";
@@ -162,6 +163,7 @@ const { initMap, setCountriesData, setSingleCountry, setSingleProvince, destroyM
         isPopup: props.isPopup,
         isLCC: () => props.isLCC,
         showCountryOutlines: () => props.showCountryOutlines,
+        loadNotes: getAccountNotes,
     });
 
 const initializeFilters = () => {

@@ -40,6 +40,7 @@ export const useLeafletChart = (options = {}) => {
         onCountryHover,
         onMarkerClick,
         onProvinceClick,
+        loadNotes = null,
         isPopup = false,
         isLCC = false,
         showCountryOutlines = true,
@@ -210,7 +211,7 @@ export const useLeafletChart = (options = {}) => {
         if (!clusterGroup) return null;
 
         validLocations.forEach((location) => {
-            const marker = createMarkerWithPopup(location, isPopup, onMarkerClick, getIsLCC());
+            const marker = createMarkerWithPopup(location, isPopup, onMarkerClick, getIsLCC(), loadNotes);
             if (marker) {
                 clusterGroup.addLayer(marker);
             }

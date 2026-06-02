@@ -16,6 +16,7 @@ env/
 
 # Node
 node_modules/
+dist/
 
 # Local database & logs
 *.sqlite3

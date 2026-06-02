@@ -1,6 +1,35 @@
 import L from "leaflet";
 import { COLOR_BY_TYPE } from "./leafletConstants.js";
 
+// Salesforce notes are external data, so escape before injecting into popup HTML.
+const escapeHtml = (value) =>
+    String(value ?? "").replace(
+        /[&<>"']/g,
+        (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch],
+    );
+
+const formatNoteDate = (value) => {
+    if (!value) return "";
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? "" : date.toLocaleDateString();
+};
+
+const renderNotesHtml = (notes) => {
+    if (!notes || notes.length === 0) {
+        return `<em style="color:#6b7280;">No Salesforce notes</em>`;
+    }
+    return notes
+        .map((note) => {
+            const date = formatNoteDate(note.created_date);
+            return `<div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #eee;">
+                <div style="font-weight:600;">${escapeHtml(note.title) || "(untitled)"}</div>
+                <div style="white-space:pre-wrap;">${escapeHtml(note.body)}</div>
+                ${date ? `<div style="color:#6b7280;font-size:11px;">${date}</div>` : ""}
+            </div>`;
+        })
+        .join("");
+};
+
 export const normalizeLocations = (input, type) => {
     const out = [];
     if (!input) return out;
@@ -67,7 +96,7 @@ export const createMarkerIcon = (location) => {
     });
 };
 
-export const createMarkerWithPopup = (location, isPopup, onMarkerClick, isLCC = false) => {
+export const createMarkerWithPopup = (location, isPopup, onMarkerClick, isLCC = false, loadNotes = null) => {
     const { lng, lat } = getCoordinates(location);
     if (lng == null || lat == null || !isFinite(+lng) || !isFinite(+lat)) {
         return null;
@@ -80,6 +109,11 @@ export const createMarkerWithPopup = (location, isPopup, onMarkerClick, isLCC = 
     const isCompetitor =
         location.type === "competitor" && location.competitor_id && location.competitor_name;
     const isCustomer = location.type === "customer";
+
+    // Buyers (normalized to type "customer") may carry a Salesforce Account Id;
+    // if so, fetch and show that account's notes inside the popup.
+    const accountId = location.salesforce_account_id;
+    const showNotes = isCustomer && !!accountId && !isPopup && typeof loadNotes === "function";
 
     const hasMarkerClickHandler = onMarkerClick && typeof onMarkerClick === "function";
     const shouldUseStaticStyle = isPopup || !hasMarkerClickHandler || isLCC;
@@ -94,7 +128,7 @@ export const createMarkerWithPopup = (location, isPopup, onMarkerClick, isLCC = 
             ? [...location.closest_to_customer].filter((c) => c && c.competitor_name)
             : [];
 
-    const popupContent = closestList.length
+    let popupContent = closestList.length
         ? `
             <div class="popup popup--customer">
                 <div class="popup__header">
@@ -129,12 +163,38 @@ export const createMarkerWithPopup = (location, isPopup, onMarkerClick, isLCC = 
             </div>
         `;
 
+    if (showNotes) {
+        popupContent += `
+            <div class="popup__notes" style="margin-top:8px;padding-top:8px;border-top:1px solid #ddd;max-width:260px;">
+                <div style="font-weight:600;margin-bottom:4px;">Salesforce notes</div>
+                <div class="popup__notes-body" style="max-height:160px;overflow:auto;">Loading…</div>
+            </div>`;
+    }
+
     const popup = L.popup({
         autoPan: true,
         autoPanPadding: [50, 50],
         keepInView: true,
     }).setContent(popupContent);
     marker.bindPopup(popup);
+
+    if (showNotes) {
+        marker.on("popupopen", async () => {
+            if (marker._sfNotesLoaded) return; // cache: fetch once per marker
+            const popupElement = marker.getPopup()?.getElement();
+            const bodyEl = popupElement?.querySelector(".popup__notes-body");
+            if (!bodyEl) return;
+            try {
+                const notes = await loadNotes(accountId);
+                bodyEl.innerHTML = renderNotesHtml(notes);
+                marker._sfNotesLoaded = true; // only cache on success
+            } catch (error) {
+                console.warn("Failed to load Salesforce notes:", error);
+                bodyEl.innerHTML = `<em style="color:#b91c1c;">Couldn't load notes</em>`;
+            }
+            marker.getPopup()?.update();
+        });
+    }
 
     if (isCompetitor && onMarkerClick && !isPopup) {
         marker.on("popupopen", () => {
