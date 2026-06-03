@@ -1,11 +1,12 @@
 import { get } from "../utils/requests";
-import type { SalesforceNote } from "../types/salesforce";
 
 /**
- * Fetch the Salesforce notes for an Account. Returns [] on error or no notes
- * (the popup treats empty as "no notes").
+ * Fetch the Salesforce notes for an Account. Returns the raw response so the
+ * caller can distinguish notes vs. empty vs. auth failure vs. error:
+ *   success: { account_id, notes: [...] }
+ *   401:     { success: false, unauthorized: true }
+ *   error:   { success: false, message }
  */
-export async function getAccountNotes(accountId: string): Promise<SalesforceNote[]> {
-    const response = await get(`/salesforce/notes/?account_id=${encodeURIComponent(accountId)}`);
-    return Array.isArray(response?.notes) ? response.notes : [];
+export async function getAccountNotes(accountId: string) {
+    return await get(`/salesforce/notes/?account_id=${encodeURIComponent(accountId)}`);
 }

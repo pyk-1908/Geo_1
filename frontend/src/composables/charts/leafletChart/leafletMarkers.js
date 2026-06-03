@@ -205,22 +205,33 @@ export const createMarkerWithPopup = (location, isPopup, onMarkerClick, isLCC = 
             // popup content to the original HTML on every open, so we must re-render into
             // the fresh body each time; we cache the fetched DATA so we only hit the API once.
             setTimeout(async () => {
-                const bodyEl = marker.getPopup()?.getElement()?.querySelector(".popup__notes-body");
-                if (!bodyEl) return;
+                // Render into the live popup body. We must NOT call popup.update() —
+                // Leaflet rebuilds the popup HTML from the original string on update,
+                // which would wipe the notes back to "Loading...". Re-query each time
+                // so we always write into the current node.
+                const renderInto = (html) => {
+                    const el = marker.getPopup()?.getElement()?.querySelector(".popup__notes-body");
+                    if (el) el.innerHTML = html;
+                };
+
                 if (marker._sfNotes !== undefined) {
-                    bodyEl.innerHTML = renderNotesHtml(marker._sfNotes);
-                    marker.getPopup()?.update();
+                    renderInto(renderNotesHtml(marker._sfNotes));
                     return;
                 }
                 try {
-                    const notes = await loadNotes(accountId);
-                    marker._sfNotes = notes;
-                    bodyEl.innerHTML = renderNotesHtml(notes);
+                    const resp = await loadNotes(accountId);
+                    if (resp && resp.unauthorized) {
+                        renderInto(`<em style="color:#b91c1c;">Session expired — refresh and log in again.</em>`);
+                    } else if (resp && resp.success === false) {
+                        renderInto(`<em style="color:#b91c1c;">Couldn't load notes.</em>`);
+                    } else {
+                        const notes = Array.isArray(resp && resp.notes) ? resp.notes : [];
+                        marker._sfNotes = notes;
+                        renderInto(renderNotesHtml(notes));
+                    }
                 } catch (error) {
-                    console.warn("Failed to load Salesforce notes:", error);
-                    bodyEl.innerHTML = `<em style="color:#b91c1c;">Couldn't load notes</em>`;
+                    renderInto(`<em style="color:#b91c1c;">Couldn't load notes.</em>`);
                 }
-                marker.getPopup()?.update();
             }, 0);
         });
     }
