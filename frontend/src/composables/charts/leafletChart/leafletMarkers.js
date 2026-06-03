@@ -64,35 +64,56 @@ export const getCoordinates = (location) => {
     return { lng, lat };
 };
 
+// Inject the marker stylesheet once (hover/transition can't be done with inline styles).
+let markerStylesInjected = false;
+const ensureMarkerStyles = () => {
+    if (markerStylesInjected || typeof document === "undefined") return;
+    markerStylesInjected = true;
+    const style = document.createElement("style");
+    style.id = "si-marker-styles";
+    style.textContent = `
+        .si-marker { width: 16px; height: 16px; }
+        .si-marker__dot {
+            width: 16px; height: 16px; border-radius: 50%;
+            border: 2px solid #ffffff; box-sizing: border-box;
+            box-shadow: 0 1px 4px rgba(16,24,40,.35);
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+        .si-marker:hover { z-index: 1000 !important; }
+        .si-marker:hover .si-marker__dot {
+            transform: scale(1.35);
+            box-shadow: 0 3px 10px rgba(16,24,40,.45);
+        }
+        .si-marker__label {
+            position: absolute; left: 50%; bottom: calc(100% + 6px);
+            transform: translateX(-50%);
+            background: #ffffff; color: #1f2937;
+            font-size: 11px; font-weight: 600; line-height: 1;
+            padding: 4px 7px; border-radius: 7px; white-space: nowrap;
+            pointer-events: none; border: 1px solid #ECEBEA;
+            box-shadow: 0 2px 6px rgba(16,24,40,.18);
+        }
+        .si-marker__label::after {
+            content: ""; position: absolute; top: 100%; left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid transparent; border-top-color: #ffffff;
+        }
+    `;
+    document.head.appendChild(style);
+};
+
 export const createMarkerIcon = (location) => {
+    ensureMarkerStyles();
     const color = COLOR_BY_TYPE[location.type] || "#7C3AED";
-    const iconSize = 20;
-    const iconHeight = 10;
+    const label = location.city_name
+        ? `<div class="si-marker__label">${escapeHtml(location.city_name)}</div>`
+        : "";
 
     return L.divIcon({
-        className: "custom-marker",
-        html: `<div style="
-            width: ${iconSize}px;
-            height: ${iconHeight}px;
-            background: ${color};
-            border: 1px solid #E3E2E0;
-            border-radius: 10px;
-            position: relative;
-        ">
-            <span style="
-                position: absolute;
-                top: -10%;
-                left: 50%;
-                transform: translate(-50%, -100%);
-                font-size: 10px;
-                font-weight: 400;
-                color: #2a2a2a;
-                white-space: nowrap;
-                pointer-events: none;
-            ">${location.city_name || ""}</span>
-        </div>`,
-        iconSize: [iconSize, iconHeight],
-        iconAnchor: [iconSize / 2, iconHeight / 2],
+        className: "custom-marker si-marker",
+        html: `<div class="si-marker__dot" style="background:${color};"></div>${label}`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
     });
 };
 
@@ -179,20 +200,28 @@ export const createMarkerWithPopup = (location, isPopup, onMarkerClick, isLCC = 
     marker.bindPopup(popup);
 
     if (showNotes) {
-        marker.on("popupopen", async () => {
-            if (marker._sfNotesLoaded) return; // cache: fetch once per marker
-            const popupElement = marker.getPopup()?.getElement();
-            const bodyEl = popupElement?.querySelector(".popup__notes-body");
-            if (!bodyEl) return;
-            try {
-                const notes = await loadNotes(accountId);
-                bodyEl.innerHTML = renderNotesHtml(notes);
-                marker._sfNotesLoaded = true; // only cache on success
-            } catch (error) {
-                console.warn("Failed to load Salesforce notes:", error);
-                bodyEl.innerHTML = `<em style="color:#b91c1c;">Couldn't load notes</em>`;
-            }
-            marker.getPopup()?.update();
+        marker.on("popupopen", () => {
+            // Defer so the popup DOM is attached before we query it. Leaflet resets the
+            // popup content to the original HTML on every open, so we must re-render into
+            // the fresh body each time; we cache the fetched DATA so we only hit the API once.
+            setTimeout(async () => {
+                const bodyEl = marker.getPopup()?.getElement()?.querySelector(".popup__notes-body");
+                if (!bodyEl) return;
+                if (marker._sfNotes !== undefined) {
+                    bodyEl.innerHTML = renderNotesHtml(marker._sfNotes);
+                    marker.getPopup()?.update();
+                    return;
+                }
+                try {
+                    const notes = await loadNotes(accountId);
+                    marker._sfNotes = notes;
+                    bodyEl.innerHTML = renderNotesHtml(notes);
+                } catch (error) {
+                    console.warn("Failed to load Salesforce notes:", error);
+                    bodyEl.innerHTML = `<em style="color:#b91c1c;">Couldn't load notes</em>`;
+                }
+                marker.getPopup()?.update();
+            }, 0);
         });
     }
 
