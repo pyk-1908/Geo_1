@@ -1,4 +1,5 @@
 import { get } from "../utils/requests";
+import { dummyMapMarks } from "@/data/dummyMapMarks";
 
 export async function getCustomerCountryMap(
     countryIds: string | number,
@@ -8,5 +9,14 @@ export async function getCustomerCountryMap(
         country_id: String(countryIds),
         product_id: productIds,
     });
-    return await get(`/buyer/buyer_map/?${params.toString()}`);
+    const data = await get(`/buyer/buyer_map/?${params.toString()}`);
+
+    if (
+        import.meta.env.DEV &&
+        (!data || data.success === false || !data.country || data.country.length === 0)
+    ) {
+        return dummyMapMarks;
+    }
+
+    return data;
 }
