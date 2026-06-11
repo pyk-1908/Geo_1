@@ -1,4 +1,5 @@
 import gettext as gettext
+from datetime import date
 
 from dateutil.relativedelta import relativedelta
 
@@ -26,6 +27,9 @@ def get_date_range() -> tuple[str, str]:
         .values_list("customerperiod__begin", flat=True)
         .first()
     )
+    if begin_date is None:
+        begin_date = date.today()
+
     selected_start_date = (begin_date - relativedelta(years=1)).strftime("%Y-%m-%d")
     selected_end_date = begin_date.strftime("%Y-%m-%d")
     return selected_start_date, selected_end_date
