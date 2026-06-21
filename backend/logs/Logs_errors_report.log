@@ -1,0 +1,96 @@
+INFO 2026-05-13 16:55:26,980 autoreload: Watching for file changes with StatReloader
+WARNING 2026-05-13 16:55:37,469 log: Not Found: /
+WARNING 2026-05-13 16:55:37,471 basehttp: "GET / HTTP/1.1" 404 2754
+WARNING 2026-05-13 16:55:39,618 log: Not Found: /favicon.ico
+WARNING 2026-05-13 16:55:39,620 basehttp: "GET /favicon.ico HTTP/1.1" 404 2805
+WARNING 2026-05-13 16:55:39,621 log: Not Found: /apple-touch-icon.png
+WARNING 2026-05-13 16:55:39,622 basehttp: "GET /apple-touch-icon.png HTTP/1.1" 404 2832
+WARNING 2026-05-13 16:55:39,627 log: Not Found: /apple-touch-icon-precomposed.png
+WARNING 2026-05-13 16:55:39,630 basehttp: "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 2868
+INFO 2026-05-13 16:55:39,631 basehttp: "GET /uploaddb/ HTTP/1.1" 200 6997
+INFO 2026-05-13 16:57:21,397 api: Successful login from IP:127.0.0.1 for USER:admin
+INFO 2026-05-13 16:57:21,400 operation: "POST - AuthController[obtain_token] /api/token/pair" 1.610671043395996
+INFO 2026-05-13 16:57:21,402 basehttp: "POST /api/token/pair HTTP/1.1" 200 507
+WARNING 2026-05-13 16:57:22,303 log: Forbidden: /api/lists/buyermap/cluster/
+WARNING 2026-05-13 16:57:22,303 basehttp: "GET /api/lists/buyermap/cluster/ HTTP/1.1" 403 22
+INFO 2026-05-25 06:13:03,397 autoreload: Watching for file changes with StatReloader
+INFO 2026-05-25 06:14:32,504 basehttp: "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-05-25 06:14:32,643 basehttp: "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4181
+INFO 2026-05-25 06:14:32,761 basehttp: "GET /static/admin/css/base.css HTTP/1.1" 200 21310
+INFO 2026-05-25 06:14:32,783 basehttp: "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+INFO 2026-05-25 06:14:32,784 basehttp: "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2026-05-25 06:14:32,787 basehttp: "GET /static/admin/css/login.css HTTP/1.1" 200 958
+INFO 2026-05-25 06:14:32,786 basehttp: "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+INFO 2026-05-25 06:14:32,785 basehttp: "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+INFO 2026-05-25 06:14:32,789 basehttp: "GET /static/admin/css/responsive.css HTTP/1.1" 200 18559
+WARNING 2026-05-25 06:14:33,068 log: Not Found: /favicon.ico
+WARNING 2026-05-25 06:14:33,072 basehttp: "GET /favicon.ico HTTP/1.1" 404 2805
+INFO 2026-05-25 06:15:09,018 basehttp: "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2026-05-25 06:15:09,071 basehttp: "GET /admin/ HTTP/1.1" 200 10191
+INFO 2026-05-25 06:15:09,092 basehttp: "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2026-05-25 06:15:09,154 basehttp: "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2026-05-25 06:15:09,157 basehttp: "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+WARNING 2026-05-25 06:15:09,282 log: Not Found: /favicon.ico
+WARNING 2026-05-25 06:15:09,283 log: Not Found: /apple-touch-icon-precomposed.png
+WARNING 2026-05-25 06:15:09,284 log: Not Found: /apple-touch-icon.png
+WARNING 2026-05-25 06:15:09,285 basehttp: "GET /favicon.ico HTTP/1.1" 404 2805
+WARNING 2026-05-25 06:15:09,285 basehttp: "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 2868
+WARNING 2026-05-25 06:15:09,286 basehttp: "GET /apple-touch-icon.png HTTP/1.1" 404 2832
+INFO 2026-05-25 06:15:39,163 basehttp: - Broken pipe from ('127.0.0.1', 54652)
+INFO 2026-05-25 06:15:42,062 basehttp: "GET /uploaddb/ HTTP/1.1" 200 6997
+WARNING 2026-05-25 06:15:43,753 log: Not Found: /apple-touch-icon-precomposed.png
+WARNING 2026-05-25 06:15:43,759 basehttp: "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 2868
+WARNING 2026-05-25 06:15:43,772 log: Not Found: /apple-touch-icon.png
+WARNING 2026-05-25 06:15:43,773 basehttp: "GET /apple-touch-icon.png HTTP/1.1" 404 2832
+WARNING 2026-05-25 06:15:43,777 log: Not Found: /favicon.ico
+WARNING 2026-05-25 06:15:43,777 basehttp: "GET /favicon.ico HTTP/1.1" 404 2805
+INFO 2026-05-25 06:15:44,540 basehttp: "GET /uploadspendcube/ HTTP/1.1" 200 6930
+INFO 2026-05-25 06:17:59,906 api: Successful login from IP:127.0.0.1 for USER:admin
+INFO 2026-05-25 06:17:59,910 operation: "POST - AuthController[obtain_token] /api/token/pair" 0.7084131240844727
+INFO 2026-05-25 06:17:59,911 basehttp: "POST /api/token/pair HTTP/1.1" 200 507
+WARNING 2026-05-25 06:17:59,963 log: Forbidden: /api/upload/uploaddb/
+WARNING 2026-05-25 06:17:59,963 basehttp: "POST /api/upload/uploaddb/ HTTP/1.1" 403 22
+INFO 2026-05-25 06:18:01,466 api: Successful login from IP:127.0.0.1 for USER:admin
+INFO 2026-05-25 06:18:01,466 operation: "POST - AuthController[obtain_token] /api/token/pair" 0.14082694053649902
+INFO 2026-05-25 06:18:01,466 basehttp: "POST /api/token/pair HTTP/1.1" 200 507
+WARNING 2026-05-25 06:18:01,483 log: Forbidden: /api/upload/uploaddb/
+WARNING 2026-05-25 06:18:01,483 basehttp: "POST /api/upload/uploaddb/ HTTP/1.1" 403 22
+INFO 2026-05-25 06:18:02,117 api: Successful login from IP:127.0.0.1 for USER:admin
+INFO 2026-05-25 06:18:02,118 operation: "POST - AuthController[obtain_token] /api/token/pair" 0.1295149326324463
+INFO 2026-05-25 06:18:02,118 basehttp: "POST /api/token/pair HTTP/1.1" 200 507
+WARNING 2026-05-25 06:18:02,136 log: Forbidden: /api/upload/uploaddb/
+WARNING 2026-05-25 06:18:02,136 basehttp: "POST /api/upload/uploaddb/ HTTP/1.1" 403 22
+INFO 2026-05-25 06:18:02,654 api: Successful login from IP:127.0.0.1 for USER:admin
+INFO 2026-05-25 06:18:02,655 operation: "POST - AuthController[obtain_token] /api/token/pair" 0.1311647891998291
+INFO 2026-05-25 06:18:02,655 basehttp: "POST /api/token/pair HTTP/1.1" 200 507
+WARNING 2026-05-25 06:18:02,677 log: Forbidden: /api/upload/uploaddb/
+WARNING 2026-05-25 06:18:02,677 basehttp: "POST /api/upload/uploaddb/ HTTP/1.1" 403 22
+INFO 2026-05-25 06:18:03,007 api: Successful login from IP:127.0.0.1 for USER:admin
+INFO 2026-05-25 06:18:03,008 operation: "POST - AuthController[obtain_token] /api/token/pair" 0.13672804832458496
+INFO 2026-05-25 06:18:03,008 basehttp: "POST /api/token/pair HTTP/1.1" 200 507
+WARNING 2026-05-25 06:18:03,027 log: Forbidden: /api/upload/uploaddb/
+WARNING 2026-05-25 06:18:03,027 basehttp: "POST /api/upload/uploaddb/ HTTP/1.1" 403 22
+INFO 2026-05-25 06:18:03,411 api: Successful login from IP:127.0.0.1 for USER:admin
+INFO 2026-05-25 06:18:03,411 operation: "POST - AuthController[obtain_token] /api/token/pair" 0.13893818855285645
+INFO 2026-05-25 06:18:03,411 basehttp: "POST /api/token/pair HTTP/1.1" 200 507
+WARNING 2026-05-25 06:18:03,440 log: Forbidden: /api/upload/uploaddb/
+WARNING 2026-05-25 06:18:03,440 basehttp: "POST /api/upload/uploaddb/ HTTP/1.1" 403 22
+INFO 2026-05-25 06:18:03,736 api: Successful login from IP:127.0.0.1 for USER:admin
+INFO 2026-05-25 06:18:03,736 operation: "POST - AuthController[obtain_token] /api/token/pair" 0.12994885444641113
+INFO 2026-05-25 06:18:03,736 basehttp: "POST /api/token/pair HTTP/1.1" 200 507
+WARNING 2026-05-25 06:18:03,756 log: Forbidden: /api/upload/uploaddb/
+WARNING 2026-05-25 06:18:03,756 basehttp: "POST /api/upload/uploaddb/ HTTP/1.1" 403 22
+INFO 2026-05-25 06:22:58,255 autoreload: Watching for file changes with StatReloader
+INFO 2026-05-25 06:23:22,047 basehttp: "GET /admin/ HTTP/1.1" 200 10191
+INFO 2026-05-25 06:23:27,587 basehttp: "GET /uploaddb/ HTTP/1.1" 200 6997
+INFO 2026-05-25 06:23:34,401 basehttp: "POST /admin/logout/ HTTP/1.1" 200 3576
+INFO 2026-05-25 06:23:36,246 basehttp: "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-05-25 06:23:36,274 basehttp: "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4181
+INFO 2026-05-25 06:23:44,828 basehttp: "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4344
+INFO 2026-05-25 06:23:51,880 basehttp: "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4344
+INFO 2026-05-25 06:23:58,849 basehttp: "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2026-05-25 06:23:58,880 basehttp: "GET /admin/ HTTP/1.1" 200 10191
+WARNING 2026-05-25 06:25:36,313 operation: "POST - AuthController[obtain_token] /api/token/pair" 401
+WARNING 2026-05-25 06:25:36,313 api: Failed login attempt from IP:127.0.0.1 for USER:admin
+WARNING 2026-05-25 06:25:36,315 log: Unauthorized: /api/token/pair
+WARNING 2026-05-25 06:25:36,316 basehttp: "POST /api/token/pair HTTP/1.1" 401 36
